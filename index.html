@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='//at.alicdn.com/t/font_541478_lzgibec33ksp2e29.js'></script>
+    <title>vue-todo</title>
+    <style>
+        .icon {
+            width: 1em; height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+        body{
+            background-color: #edfcf4;
+            font-family: Arial;
+        }
+        *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .app{
+           padding-top: 50px;
+           width: 100%;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+        }
+        .app .newTask,
+        .app .operating,
+        .todos{
+            width: 40%;
+        }
+        .app .newTask .input{
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid gray;
+            outline: none;
+            padding-left: 5px;
+            white-space: pre-line;
+            box-shadow: 2px 0px 5px -2px black,
+                       -2px 0px 5px -2px black;
+        }
+        .todos{
+            padding: 20px 0px 20px 20px;
+        }
+        .todos .todoOuter{
+            margin-bottom: 10px;
+        }
+        .todos li{
+            text-align: justify;
+            white-space: pre-line;
+            width: auto;
+        }
+        .todos p{
+            text-align: right;
+        }
+        .todos p.true span{
+            color: #5176c7;
+        }
+        .todos .todoOuter p span{
+            display: inline-block;
+            margin: 0px 20px;
+        }
+        .todos .todoOuter li input[type="checkbox"]{
+            position: absolute;
+            clip: rect(0,0,0,0);
+        }
+        .todos .todoOuter li input[type="checkbox"] + label::before{
+            content: "\a0";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            margin-right: 3px;
+            border-radius: 3px;
+            background: #cae7da;
+            text-align: center;
+        }
+        .todos .todoOuter li input[type="checkbox"]:checked + label::before{
+            content: "\2713";
+            background: #5176c7;
+        }
+        .todos .todoOuter li input[type="checkbox"]:checked + span{
+            color: #5176c7;
+        }
+        .todos .todoOuter p .icon{
+            cursor: pointer;
+        }
+        .app .topic{
+            width: 100%;
+            font-size: 35px;
+            text-align: center;
+            padding-bottom: 10px;
+            color: #35495e;
+        }
+        .app .topic span{
+            font-size: 40px;
+            color: #5176c7;
+        }
+        .clearfix::after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+        .app .operating{
+            display: flex;
+            flex-direction: row;
+            margin-top: 10px;
+            background: radial-gradient(circle at center,#5176c7 0,#b4e4ce 100%);
+            box-shadow: 0px 3px 6px -2px rgb(90, 90, 90);
+        }
+        .app .operating div.selected{
+            background-color: #35495e;
+        }
+        .app .operating div{
+            width:33.3333333%;
+            text-align: center;
+            padding: 5px 0px;
+            cursor: pointer;
+            color: white;
+        }
+        .app .operating div:nth-child(2){
+            border-left: 1px solid white;
+            border-right: 1px solid white;
+        }
+        @media screen and (max-width: 768px){
+            .app .newTask,
+            .app .operating,
+            .todos{
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="app" v-cloak>
+        <div class='topic'>to<span>Do</span>s</div>
+        <div class="newTask">
+          <input type="text" class="input" v-model="newTodo" @keypress.enter="addTodo"> 
+        </div>
+        <div class="operating clearfix">
+            <div class="all checked" @click="allListChecked"  v-bind:class="{selected: optionAll}">全选</div>
+            <div class='active' @click="activeListChecked" v-bind:class="{selected: optionActive}">待完成</div>
+            <div class="completed" @click="completedListChecked"   v-bind:class="{selected: optionCompleted}">已完成</div>
+        </div>
+        <ol class="todos">
+            <div v-for="item in todoList" class='todoOuter'>
+                <li>
+                    <input type="checkbox"  v-bind:id="'_'+ item.index" v-model="item.done" @click="didYouFinishIt(item)"><label v-bind:for="'_'+ item.index">{{ item.title }}</label>
+                </li>
+                <p v-bind:class="item.done ? 'true' : ''">
+                    <svg class="icon" aria-hidden="true" @click="removeTodo(item)">
+                        <use xlink:href="#icon-shanchu"></use>
+                    </svg><span v-if="item.done" >已完成</span><span v-else>未完成</span>{{ item.createdAt }}
+                </p>
+            </div>
+        </ol>
+    </div>
+    <script src="./src/bundle.js"></script>
+</body>
+</html>

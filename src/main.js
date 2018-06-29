@@ -13,11 +13,11 @@ let app = new Vue({
     optionCompleted: false
   },
   created(){
-    let oldData = JSON.parse(window.localStorage.getItem('hangbinTodos'));
+    let oldData = JSON.parse(window.localStorage.getItem('SamTodos'));
     this.allList = oldData || [];
     window.onbeforeunload = ()=>{
       let dataString = JSON.stringify(this.allList) ;
-      window.localStorage.setItem('hangbinTodos', dataString);
+      window.localStorage.setItem('SamTodos', dataString);
     }
     this.todoList = this.allList;
     this.activeList = this.allList.filter(function(elem){
